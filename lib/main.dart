@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/database.dart';
 import 'Note.dart';
+import 'screen/NewNoteScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -86,7 +87,17 @@ class _MyHomePageState extends State<MyHomePage> {
               return CircularProgressIndicator();
             }
           }
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewNoteScreen())
+          );
+        },
+        tooltip: 'Add',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
