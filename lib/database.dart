@@ -53,4 +53,13 @@ class DBHelper {
     });
   }
 
+  Future<void> saveNote(Note note) async {
+    final db = await dbInstance;
+    await db.insert(
+        'notes', // tabel
+        note.toMap(), // value
+        conflictAlgorithm: ConflictAlgorithm.replace // mengganti saat ada data yg sama di database
+    );
+  }
+
 }
