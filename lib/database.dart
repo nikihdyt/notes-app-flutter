@@ -62,4 +62,13 @@ class DBHelper {
     );
   }
 
+  Future<void> deleteNote(noteId) async {
+    final db = await dbInstance;
+    await db?.delete(
+      'notes', // tabel
+      where: 'id = ?',
+      whereArgs: [noteId]
+    );
+  }
+
 }

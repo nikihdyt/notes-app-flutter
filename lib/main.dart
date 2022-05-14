@@ -53,6 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  removeNote(noteId) {
+    dbHelper.deleteNote(noteId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       final currentItem = snapshot.data![index];
-                      return ListTile(title: Text('${currentItem.title}'));
+                      // menghaous dari front-end nya saja, di database blm terhapus
+                      return Dismissible(
+                        // key: penanda unik mana yg mau dihapus
+                        key: UniqueKey(),
+                        background: Container(color: Colors.red,),
+                        child: ListTile(title: Text('${currentItem.title}')),
+                        onDismissed: (direction) => removeNote(currentItem.id),
+                      );
                     },
                   ));
             } else if (snapshot.hasError) {
