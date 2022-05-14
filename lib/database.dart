@@ -5,11 +5,11 @@ import 'Note.dart';
 
 class DBHelper {
 
-  late Database _database;
+  Database? _database;
 
   // menggunakan pola singleton -> hanya dapat dibuat instancenya sekali
   // me-return database yang dipakai di aplikasi ini
-  Future<Database> get dbInstance async {
+  Future<Database?> get dbInstance async {
     if (_database != null) {
       return _database;
     } else{
@@ -42,7 +42,7 @@ class DBHelper {
     final db = await dbInstance;
 
     // query daftar tabelnya, yg diambil dari nama tabel yg dibuat di initDB() -> onCreate
-    final List<Map<String, dynamic>> maps = await db.query('notes');
+    final List<Map<String, dynamic>> maps = await db!.query('notes');
 
     // loop isi data di dalam daftar catatannya
     return List.generate(maps.length, (index) {
@@ -55,7 +55,7 @@ class DBHelper {
 
   Future<void> saveNote(Note note) async {
     final db = await dbInstance;
-    await db.insert(
+    await db?.insert(
         'notes', // tabel
         note.toMap(), // value
         conflictAlgorithm: ConflictAlgorithm.replace // mengganti saat ada data yg sama di database
