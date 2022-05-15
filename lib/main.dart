@@ -53,6 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  editNote(context, currentItem) {
+    Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => NewNoteScreen(oldNote: currentItem)));
+  }
+
   removeNote(noteId) {
     dbHelper.deleteNote(noteId);
   }
@@ -83,7 +89,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         // key: penanda unik mana yg mau dihapus
                         key: UniqueKey(),
                         background: Container(color: Colors.red,),
-                        child: ListTile(title: Text('${currentItem.title}')),
+                        child: ListTile(
+                          title: Text('${currentItem.title}'),
+                          onTap: () => editNote(context, currentItem),
+                        ),
                         onDismissed: (direction) => removeNote(currentItem.id),
                       );
                     },

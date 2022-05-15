@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:note_app/database.dart';
 import 'package:note_app/Note.dart';
 import 'package:note_app/main.dart';
-import 'package:note_app/main.dart';
 
 class NewNoteScreen extends StatefulWidget {
+  final Note? oldNote;
+
+  // buat constructor ini untuk keperluan editNote
+  NewNoteScreen({this.oldNote});
+
   @override
   _NewNoteScreenState createState() => _NewNoteScreenState();
 }
