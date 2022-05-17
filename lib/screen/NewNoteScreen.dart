@@ -16,6 +16,8 @@ class NewNoteScreen extends StatefulWidget {
 class _NewNoteScreenState extends State<NewNoteScreen> {
 
   var dbHelper;
+  // false --> buat catatan baru; true --> edit catatan lama
+  var updateMode = false;
   // agar bisa mengakses keseluruhan form dan memainkan validasinya
   final _noteForm = GlobalKey<FormState>(); // key dari Form
   // buat variabel controller
@@ -27,23 +29,49 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
     super.initState();
     // buat instance class DBHelper dari database.dart
     dbHelper = DBHelper();
+
+    if (widget.oldNote != null){
+      setUpdateNote(widget.oldNote);
+    }
+  }
+
+  setUpdateNote(oldNote) {
+    updateMode = true;
+    titleController.text = oldNote.title.toString();
+    bodyController.text = oldNote.body.toString();
+  }
+
+  goToMyApp() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyApp()
+        )
+    );
   }
 
   submitNote(context) async {
     // jika keadaannya _noteForm sudah lolos validasi
     if (_noteForm.currentState!.validate()) {
-      final newNote = Note(
-          title: titleController.text,
-          body: bodyController.text);
+      if (updateMode == true) {
+        final newNote = Note(
+            id: widget.oldNote?.id,
+            title: titleController.text,
+            body: bodyController.text);
 
-      await dbHelper.saveNote(newNote).then({
-        // kalau berhasil, kembali ke screen awal (MyApp)
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyApp()
-            )
-        )
-      });
+        await dbHelper.updateNote(newNote).then({
+          // kalau berhasil, kembali ke screen awal (MyApp)
+          goToMyApp()
+        });
+      } else {
+        final newNote = Note(
+            title: titleController.text,
+            body: bodyController.text);
+
+        await dbHelper.saveNote(newNote).then({
+          // kalau berhasil, kembali ke screen awal (MyApp)
+          goToMyApp()
+        });
+      }
     }
   }
 
@@ -91,7 +119,9 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
 
               ElevatedButton(
                 onPressed: () => submitNote(context),
-                child: Text('Save', style: TextStyle(fontSize: 20),),
+                child: Text(
+                  updateMode ? 'Update' : 'Save', //(ternary operator) if true, 'update', if !true, 'save'
+                  style: TextStyle(fontSize: 20),),
                 ),
             ],
           ),

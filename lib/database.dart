@@ -62,6 +62,16 @@ class DBHelper {
     );
   }
 
+  Future<void> updateNote(Note note) async {
+    final db = await dbInstance;
+    await db?.update(
+        'notes', // tabel
+        note.toMap(), // value
+        where: 'id = ?',
+        whereArgs: [note.id]
+    );
+  }
+
   Future<void> deleteNote(noteId) async {
     final db = await dbInstance;
     await db?.delete(
