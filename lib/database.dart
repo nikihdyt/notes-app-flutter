@@ -42,7 +42,7 @@ class DBHelper {
     final db = await dbInstance;
 
     // query daftar tabelnya, yg diambil dari nama tabel yg dibuat di initDB() -> onCreate
-    final List<Map<String, dynamic>> maps = await db!.query('notes');
+    final List<Map<String, dynamic>> maps = await db!.query('notes', orderBy: 'id DESC');
 
     // loop isi data di dalam daftar catatannya
     return List.generate(maps.length, (index) {
